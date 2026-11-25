@@ -92,7 +92,7 @@ create policy "coups visibles" on public.moves
 
 -- Nombre de lettres différentes entre deux mots (-1 si longueurs différentes)
 create or replace function public.word_diff(a text, b text)
-returns int language plpgsql immutable as $$
+returns int language plpgsql immutable set search_path = public as $$
 declare n int := 0; i int;
 begin
   if char_length(a) <> char_length(b) then return -1; end if;
@@ -211,6 +211,7 @@ revoke all on function public.create_game(text, text) from public, anon;
 revoke all on function public.join_game(uuid)         from public, anon;
 revoke all on function public.play_move(uuid, text)   from public, anon;
 revoke all on function public.resign_game(uuid)       from public, anon;
+revoke all on function public.handle_new_user()       from public, anon, authenticated;
 grant execute on function public.create_game(text, text) to authenticated;
 grant execute on function public.join_game(uuid)         to authenticated;
 grant execute on function public.play_move(uuid, text)   to authenticated;
